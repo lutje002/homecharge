@@ -54,6 +54,22 @@
       margin: 10px 0;
       width: 100px;
     }
+    .upload-container {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .upload-container.dragover {
+      background-color: #e1f5fe;
+      border-color: #2196F3;
+    }
+    #preview {
+      max-width: 100%;
+      margin-top: 20px;
+      display: none;
+    }
     @media (max-width: 768px) {
       .container {
         padding: 10px;
@@ -70,12 +86,19 @@
   <div class="container">
     <h1>NCubed Factuur Generator</h1>
     
+    <div class="upload-container" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      <button onclick="document.getElementById('fileInput').click()">Upload Screenshot</button>
+      <p>Of sleep een afbeelding hierheen</p>
+      <img id="preview" src="" alt="Preview">
+    </div>
+    
     <div>
       <label for="pricePerKwh">Prijs per kWh: €</label>
       <input type="number" id="pricePerKwh" value="0.28" step="0.01">
     </div>
 
-    <button onclick="generateInvoice()">Genereer Factuur</button>
+    <button onclick="updateInvoice()">Genereer Factuur</button>
 
     <div id="invoiceContainer">
       <h2>Factuur</h2>
@@ -110,6 +133,45 @@
       { date: '30/03/2025', kwh: 45 }
     ];
 
+    // File upload handling
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      handleFile(file);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      handleFile(file);
+    });
+
+    function handleFile(file) {
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please upload an image file.');
+      }
+    }
+
     function generateInvoiceNumber() {
       const now = new Date();
       const dd = String(now.getDate()).padStart(2, '0');
@@ -120,7 +182,7 @@
       return `${dd}${mm}${yyyy}${hh}${min}`;
     }
 
-    function generateInvoice() {
+    function updateInvoice() {
       const pricePerKwh = parseFloat(document.getElementById('pricePerKwh').value);
       const invoiceBody = document.getElementById('invoiceBody');
       invoiceBody.innerHTML = '';
@@ -173,6 +235,12 @@
       doc.text('T.a.v. Rob Visser', 20, y + 7);
 
       y += 30;
+
+      // Add screenshot if available
+      if (preview.src && preview.style.display !== 'none') {
+        doc.addImage(preview.src, 'JPEG', 20, y, 170, 100);
+        y += 110;
+      }
 
       const tableData = {
         head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
@@ -240,7 +308,7 @@
     }
 
     // Genereer de factuur direct bij het laden van de pagina
-    window.onload = generateInvoice;
+    window.onload = updateInvoice;
   </script>
 </body>
 </html>
