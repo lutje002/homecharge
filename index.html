@@ -242,7 +242,7 @@
                 const imageUrl = uploadResult.data.url;
                 
                 console.log('Aanroepen Worker API...');
-                const response = await fetch('https://old-voice-773e.r-lutjenkossink.workers.dev/', {
+                const response = await fetch('https://old-voice-773e.r-lutjenkossink.workers.dev/monica', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -269,15 +269,23 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Fout bij analyse van de afbeelding');
+                    const errorText = await response.text();
+                    console.error('Worker Error Response:', errorText);
+                    throw new Error(`Fout bij analyse van de afbeelding (${response.status}): ${errorText}`);
                 }
                 
                 const data = await response.json();
-                console.log('Worker API response ontvangen');
-                const content = data.choices[0].message.content;
+                console.log('Worker API response ontvangen:', data);
                 
+                if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                    console.error('Onverwacht response format:', data);
+                    throw new Error('Ongeldig antwoord van de analyse service');
+                }
+                
+                const content = data.choices[0].message.content;
                 updateTable(content);
                 console.log('Verwerking succesvol afgerond');
+                
             } catch (error) {
                 console.error('Error:', error);
                 showError('Fout bij verwerking: ' + error.message);
@@ -390,7 +398,7 @@
                 ]);
             });
 
-            doc.autoTable({
+                        doc.autoTable({
                 startY: y,
                 head: tableData.head,
                 body: tableData.body,
@@ -444,3 +452,5 @@
     </script>
 </body>
 </html>
+
+
