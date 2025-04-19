@@ -106,6 +106,15 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +127,8 @@
             <p>Of sleep een afbeelding hierheen</p>
             <img id="preview" src="" alt="Preview">
         </div>
+
+        <div id="error" class="error-message"></div>
 
         <div id="loadingIndicator">
             <div class="spinner"></div>
@@ -150,14 +161,18 @@
     </div>
 
     <script>
+        // API Keys
         const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
         const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
         
+        // DOM Elements
         const dropZone = document.getElementById('dropZone');
         const photoInput = document.getElementById('photoInput');
         const preview = document.getElementById('preview');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorElement = document.getElementById('error');
 
+        // Event Listeners
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -179,6 +194,14 @@
             handleFile(file);
         });
 
+        function showError(message) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
         function handleFile(file) {
             if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
@@ -189,13 +212,14 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                alert('Upload alstublieft een afbeelding.');
+                showError('Upload alstublieft een afbeelding.');
             }
         }
 
         async function processImage(imageData) {
             try {
                 loadingIndicator.style.display = 'block';
+                errorElement.style.display = 'none';
                 console.log('Start afbeelding verwerking...');
                 
                 const base64Image = imageData.split(',')[1];
@@ -210,15 +234,15 @@
                 });
                 
                 if (!uploadResponse.ok) {
-                    throw new Error('Fout bij uploaden afbeelding: ' + uploadResponse.status);
+                    throw new Error('Fout bij uploaden afbeelding');
                 }
                 
                 const uploadResult = await uploadResponse.json();
-                console.log('ImgBB upload succesvol:', uploadResult);
+                console.log('ImgBB upload succesvol');
                 const imageUrl = uploadResult.data.url;
                 
-                console.log('Aanroepen Monica API met image URL:', imageUrl);
-                const response = await fetch('https://openapi.monica.im/v1/chat/completions', {
+                console.log('Aanroepen Worker API...');
+                const response = await fetch('https://old-voice-773e.r-lutjenkossink.workers.dev/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -245,19 +269,18 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Monica API Error: ' + response.status);
+                    throw new Error('Fout bij analyse van de afbeelding');
                 }
                 
                 const data = await response.json();
-                console.log('Monica API response ontvangen:', data);
+                console.log('Worker API response ontvangen');
                 const content = data.choices[0].message.content;
                 
-                console.log('Updaten van tabel met content:', content);
                 updateTable(content);
                 console.log('Verwerking succesvol afgerond');
             } catch (error) {
-                console.error('Volledige foutmelding:', error);
-                alert('Fout bij verwerking: ' + error.message);
+                console.error('Error:', error);
+                showError('Fout bij verwerking: ' + error.message);
             } finally {
                 loadingIndicator.style.display = 'none';
             }
@@ -271,21 +294,23 @@
             const pricePerKwh = parseFloat(document.getElementById('pricePerKwh').value);
             
             lines.forEach(line => {
-                if (line.trim()) {
+                if (line.includes(',')) {
                     const [date, kwh] = line.split(',').map(item => item.trim());
                     const kwhValue = parseFloat(kwh);
-                    const amount = kwhValue * pricePerKwh;
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${date}</td>
-                        <td>Thuisladen elektrische auto</td>
-                        <td>${kwhValue.toFixed(2)}</td>
-                        <td>€${pricePerKwh.toFixed(2)}</td>
-                        <td>€${amount.toFixed(2)}</td>
-                    `;
-                    
-                    invoiceBody.appendChild(row);
+                    if (!isNaN(kwhValue)) {
+                        const amount = kwhValue * pricePerKwh;
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${date}</td>
+                            <td>Thuisladen elektrische auto</td>
+                            <td>${kwhValue.toFixed(2)}</td>
+                            <td>€${pricePerKwh.toFixed(2)}</td>
+                            <td>€${amount.toFixed(2)}</td>
+                        `;
+                        
+                        invoiceBody.appendChild(row);
+                    }
                 }
             });
             
@@ -411,8 +436,10 @@
                 return sum + parseFloat(row.cells[2].textContent || 0);
             }, 0);
             
-            alert("De PDF kan niet automatisch als bijlage worden verzonden. Download de PDF en voeg deze handmatig toe.");
-            window.location.href = `mailto:invoices@ncubed.nl?cc=r.lutjenkossink@ncubed.nl&subject=Factuur Thuisladen ${pdf.fileName}&body=Beste,%0D%0A%0D%0ABijgevoegd de factuur voor het thuisladen van de elektrische auto.%0D%0A%0D%0ASamenvatting:%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
+            const mailtoLink = `mailto:invoices@ncubed.nl?cc=r.lutjenkossink@ncubed.nl&subject=Factuur Thuisladen ${pdf.fileName}&body=Beste,%0D%0A%0D%0ABijgevoegd de factuur voor het thuisladen van de elektrische auto.%0D%0A%0D%0ASamenvatting:%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
+            
+            pdf.doc.save(pdf.fileName);
+            window.location.href = mailtoLink;
         }
     </script>
 </body>
