@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NCubed Factuur Generator</title>
+  <title>NCubed Laadsessies</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -78,13 +78,6 @@
       margin-top: 20px;
       display: none;
     }
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      font-style: italic;
-      color: #666;
-    }
     @media (max-width: 768px) {
       .container {
         padding: 10px;
@@ -106,10 +99,6 @@
       <button onclick="document.getElementById('photoInput').click()">Upload Screenshot</button>
       <p>Of sleep een afbeelding hierheen</p>
       <img id="preview" src="" alt="Preview">
-    </div>
-
-    <div id="loading" class="loading">
-      Bezig met analyseren van de afbeelding...
     </div>
 
     <div class="price-input">
@@ -139,12 +128,11 @@
 
   <script>
     const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
-    const CORS_PROXY = 'https://corsproxy.io/?';
     
+    // File upload handling
     const dropZone = document.getElementById('dropZone');
     const photoInput = document.getElementById('photoInput');
     const preview = document.getElementById('preview');
-    const loading = document.getElementById('loading');
 
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -182,46 +170,62 @@
     }
 
     async function processImage(imageData) {
-      try {
-        loading.style.display = 'block';
-        
-        const response = await fetch(CORS_PROXY + 'https://openapi.monica.im/v1/chat/completions', {
+      const requestBody = JSON.stringify({
+        model: "gpt-4o",
+        messages: [{
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies. Format per sessie: datum, kWh"
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: imageData
+              }
+            }
+          ]
+        }]
+      });
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${MONICA_API_KEY}`
+      };
+
+      async function tryRequest(proxyUrl) {
+        const response = await fetch(proxyUrl + 'https://openapi.monica.im/v1/chat/completions', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${MONICA_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "gpt-4o",
-            messages: [{
-              role: "user",
-              content: [
-                {
-                  type: "text",
-                  text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies. Format per sessie: datum, kWh"
-                },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: imageData
-                  }
-                }
-              ]
-            }]
-          })
+          headers: headers,
+          body: requestBody
         });
 
-        if (!response.ok) throw new Error('API Error: ' + response.status);
-        
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`API Error ${response.status}`);
+        }
+
+        return response.json();
+      }
+
+      try {
+        // Probeer eerst corsproxy.io
+        try {
+          const data = await tryRequest('https://corsproxy.io/?');
+          const content = data.choices[0].message.content;
+          updateTable(content);
+          return;
+        } catch (error) {
+          console.log('corsproxy.io failed, trying cors-anywhere...');
+        }
+
+        // Als dat faalt, probeer cors-anywhere
+        const data = await tryRequest('https://cors-anywhere.herokuapp.com/');
         const content = data.choices[0].message.content;
-        
         updateTable(content);
       } catch (error) {
+        alert('Fout bij analyse: Beide proxies gefaald - ' + error.message);
         console.error('Error details:', error);
-        alert('Fout bij analyse: ' + error.message);
-      } finally {
-        loading.style.display = 'none';
       }
     }
 
@@ -229,6 +233,7 @@
       const invoiceBody = document.getElementById('invoiceBody');
       invoiceBody.innerHTML = '';
       
+      // Parse the content and extract dates and kWh values
       const lines = content.split('\n');
       const pricePerKwh = parseFloat(document.getElementById('pricePerKwh').value);
       
