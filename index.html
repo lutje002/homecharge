@@ -384,62 +384,63 @@ function generateIcons() {
             const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
             return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
         }
-
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            const currentDate = new Date();
-            const weekNumber = getWeekNumber(currentDate);
-            const formattedDate = currentDate.toLocaleDateString('nl-NL');
-            
-            // Titel
-            doc.setFontSize(16);
-            doc.text('Laadkosten Overzicht', 20, 20);
-            
-            // Afzender informatie
-            doc.setFontSize(10);
-            doc.text([
-                'Afzender:',
-                'René Lutjenkossink',
-                'Wilhelminastraat 73',
-                '7001 GV Doetinchem',
-                'Tel: +31 (0)610750680',
-                'E-mail: rene.lutjenkossink@ncubed.nl',
-                'IBAN: NL21RABO 0370019466'
-            ], 20, 35);
-            
-            // Ontvanger informatie
-            doc.text([
-                'Ontvanger:',
-                'Ncubed B.V.',
-                'Van Deventerlaan 30-40',
-                '3528 AE Utrecht',
-                't.a.v. Rob Visser'
-            ], 120, 35);
-            
-            // Factuurdetails
-            doc.setFontSize(12);
-            doc.text(`Datum: ${formattedDate}`, 20, 85);
-            doc.text(`Week: ${weekNumber}`, 20, 92);
-            doc.text(`Kenteken: HKX-39-V`, 20, 99);
-            
-            // Tabel met roze headers
-            doc.autoTable({
-                startY: 105,
-                head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
-                body: Array.from(document.querySelectorAll('#invoiceBody tr')).map(row => 
-                    Array.from(row.cells).map(cell => cell.textContent)
-                ),
-                headStyles: {
-                    fillColor: [255, 192, 203]
-                }
-            });
-            
-            doc.text(`Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`, 20, doc.lastAutoTable.finalY + 10);
-            
-            doc.save(`Laadkosten_HKX-39-V_Week${weekNumber}_${formattedDate.replace(/\//g, '-')}.pdf`);
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const currentDate = new Date();
+    const weekNumber = getWeekNumber(currentDate);
+    const formattedDate = currentDate.toLocaleDateString('nl-NL');
+    
+    // Titel
+    doc.setFontSize(16);
+    doc.text('Laadkosten Overzicht', 20, 20);
+    
+    // Afzender informatie
+    doc.setFontSize(10);
+    doc.text([
+        'Afzender:',
+        'René Lutjenkossink',
+        'Wilhelminastraat 73',
+        '7001 GV Doetinchem',
+        'Tel: +31 (0)610750680',
+        'E-mail: rene.lutjenkossink@ncubed.nl',
+        'IBAN: NL21RABO 0370019466'
+    ], 20, 35);
+    
+    // Ontvanger informatie
+    doc.text([
+        'Ontvanger:',
+        'Ncubed B.V.',
+        'Van Deventerlaan 30-40',
+        '3528 AE Utrecht',
+        't.a.v. Rob Visser'
+    ], 120, 35);
+    
+    // Factuurdetails
+    doc.setFontSize(12);
+    doc.text(`Datum: ${formattedDate}`, 20, 85);
+    doc.text(`Week: ${weekNumber}`, 20, 92);
+    doc.text(`Kenteken: HKX-39-V`, 20, 99);
+    
+    // Tabel met NCubed roze headers (#E91E63)
+    doc.autoTable({
+        startY: 105,
+        head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
+        body: Array.from(document.querySelectorAll('#invoiceBody tr')).map(row => 
+            Array.from(row.cells).map(cell => cell.textContent)
+        ),
+        headStyles: {
+            fillColor: [233, 30, 99], // NCubed roze (#E91E63)
+            textColor: [255, 255, 255] // Witte tekst voor betere leesbaarheid
         }
+    });
+    
+    doc.text(`Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`, 20, doc.lastAutoTable.finalY + 10);
+    
+    doc.save(`Laadkosten_HKX-39-V_Week${weekNumber}_${formattedDate.replace(/\//g, '-')}.pdf`);
+}
+
 
         function sendEmailOnly() {
             const totalKwh = Array.from(document.querySelectorAll('#invoiceBody tr')).reduce((sum, row) => {
