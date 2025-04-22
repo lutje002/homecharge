@@ -449,7 +449,7 @@ function generateIcons() {
             const currentDate = new Date().toLocaleDateString('nl-NL');
             const weekNumber = getWeekNumber(new Date());
             
-            const mailtoLink = `mailto:invoices@ncubed.nl?cc=r.lutjenkossink@ncubed.nl&subject=Laadkosten Week ${weekNumber} (HKX-39-V)&body=Beste,%0D%0A%0D%0AHierbij het overzicht van de laadkosten voor kenteken HKX-39-V.%0D%0A%0D%0ASamenvatting:%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
+            const mailtoLink = `mailto:invoices@ncubed.nl?cc=rene.lutjenkossink@ncubed.nl&subject=Laadkosten Week ${weekNumber} (HKX-39-V)&body=Beste,%0D%0A%0D%0AHierbij het overzicht van de laadkosten voor kenteken HKX-39-V.%0D%0A%0D%0ASamenvatting:%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
             
             window.location.href = mailtoLink;
         }
