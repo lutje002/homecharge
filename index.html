@@ -34,12 +34,11 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            gap: 15px;
         }
 
-        .header img {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
+        .header svg {
+            flex-shrink: 0;
         }
 
         .header h1 {
@@ -185,8 +184,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMjgiIGZpbGw9IiNFOTFFNjMiLz48cGF0aCBkPSJNMjU2IDExMmMtODguMzY2IDAtMTYwIDcxLjYzNC0xNjAgMTYwczc
-xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA0MGM2Ni4yNzQgMCAxMjAgNTMuNzI2IDEyMCAxMjBzLTUzLjcyNiAxMjAtMTIwIDEyMC0xMjAtNTMuNzI2LTEyMC0xMjAgNTMuNzI2LTEyMCAxMjAtMTIweiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMjg4IDIzMmgtNjRsLTMyIDk2aDY0bC0xNiA3MiAxMTItMTIwaC02NGwzMi00OHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="NCubed Logo">
+            <svg width="50" height="50" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <rect width="512" height="512" rx="128" fill="#E91E63"/>
+                <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
+                <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
+            </svg>
             <h1>NCubed Laadkosten</h1>
         </div>
         
@@ -477,7 +479,7 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
                     Array.from(row.cells).map(cell => cell.textContent)
                 ),
                 headStyles: {
-                    fillColor: [233, 30, 99], // NCubed roze
+                    fillColor: [233, 30, 99],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold'
                 },
@@ -538,6 +540,7 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
     </script>
 </body>
 </html>
+
 
 
 
