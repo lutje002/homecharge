@@ -1,18 +1,26 @@
 <head>
     <title>NCubed Laadkosten</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NCubed Laadkosten">
     
-    <!-- iOS Icon Tags -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4yLWMwMDAgNzkuMWI2NWE3OWI0LCAyMDIyLzA2LzE0LTIyOjA0OjE3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjQuMCAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjQtMDQtMjJUMDk6NDQ6NDUrMDI6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDQtMjJUMDk6NDQ6NDUrMDI6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI0LTA0LTIyVDA5OjQ0OjQ1KzAyOjAwIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjY5YzI5ZDY5LTM4ZTAtNDZhNi05ZWY5LTNhMjM2NjM0ZjM0YiIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjY5YzI5ZDY5LTM4ZTAtNDZhNi05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
-
+    <!-- iOS Icon Tags voor verschillende formaten -->
+    <link rel="apple-touch-icon" href="ncubed-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="ncubed-icon-152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="ncubed-icon-167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="ncubed-icon-180.png">
+    
     <!-- iOS Splash Screen Images -->
-    <link rel="apple-touch-startup-image" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMjgiIGZpbGw9IiNFOTFFNjMiLz4KICA8cGF0aCBkPSJNMjU2IDExMmMtODguMzY2IDAtMTYwIDcxLjYzNC0xNjAgMTYwczc1LjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA0MGM2Ni4yNzQgMCAxMjAgNTMuNzI2IDEyMCAxMjBzLTUzLjcyNiAxMjAtMTIwIDEyMC0xMjAtNTMuNzI2LTEyMC0xMjAgNTMuNzI2LTEyMCAxMjAtMTIweiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjg4IDIzMmgtNjRsLTMyIDk2aDY0bC0xNiA3MiAxMTItMTIwaC02NGwzMi00OHoiIGZpbGw9IndoaXRlIi8+CiAgPHBhdGggZD0iTTI1NiAxNzJjLTU1LjIyOCAwLTEwMCA0NC43NzItMTAwIDEwMHM0NC43NzIgMTAwIDEwMCAxMDAgMTAwLTQ0Ljc3MiAxMDAtMTAwLTQ0Ljc3Mi0xMDAtMTAwLTEwMHptMCA0MGMzMy4xMzcgMCA2MCAyNi44NjMgNjAgNjBzLTI2Ljg2MyA2MC02MCA2MC02MC0yNi44NjMtNjAtNjAgMjYuODYzLTYwIDYwLTYweiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4zIi8+Cjwvc3ZnPg==">
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" href="ncubed-splash-1290x2796.png">
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" href="ncubed-splash-1179x2556.png">
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" href="ncubed-splash-1284x2778.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="ncubed-favicon.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -187,6 +195,43 @@
         photoInput.addEventListener('change', (e) => {
             handleFiles(e.target.files);
         });
+
+// Voeg dit toe aan je bestaande JavaScript
+function generateIcons() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const sizes = [152, 167, 180];
+    
+    sizes.forEach(size => {
+        canvas.width = size;
+        canvas.height = size;
+        
+        // Roze achtergrond
+        ctx.fillStyle = '#E91E63';
+        ctx.fillRect(0, 0, size, size);
+        
+        // Teken het logo
+        const img = new Image();
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, size, size);
+            
+            // Download de PNG
+            const link = document.createElement('a');
+            link.download = `ncubed-icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+        img.src = 'data:image/svg+xml,' + encodeURIComponent(`
+            <svg width="${size}" height="${size}" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="512" height="512" rx="128" fill="#E91E63"/>
+                <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
+                <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
+                <path d="M256 172c-55.228 0-100 44.772-100 100s44.772 100 100 100 100-44.772 100-100-44.772-100-100-100zm0 40c33.137 0 60 26.863 60 60s-26.863 60-60 60-60-26.863-60-60 26.863-60 60-60z" fill="white" fill-opacity="0.3"/>
+            </svg>
+        `);
+    });
+}
+
 
         function clearAll() {
             document.getElementById('previewContainer').innerHTML = '';
