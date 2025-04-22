@@ -8,7 +8,6 @@
     <!-- PDF libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --ncubed-pink: #E91E63;
@@ -242,7 +241,6 @@
         const errorElement = document.getElementById('error');
         let processedData = [];
 
-        // Event Listeners
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -262,7 +260,6 @@
             handleFiles(e.target.files);
         });
 
-        // Helper Functions
         function getWeekNumber(d) {
             d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
             d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
@@ -430,52 +427,21 @@
                 const { week, year } = getWeekNumber(currentDate);
                 const formattedDate = currentDate.toLocaleDateString('nl-NL');
                 
-                // NCubed Logo als SVG
-                const logoSvg = `
-                <svg width="200" height="50" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="512" height="512" rx="128" fill="#E91E63"/>
-                    <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
-                    <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
-                </svg>`;
-                
-                // Logo toevoegen
-                const imgData = 'data:image/svg+xml;base64,' + btoa(logoSvg);
-                doc.addImage(imgData, 'SVG', 20, 10, 40, 40);
-                
                 // Header met bedrijfsnaam
                 doc.setFontSize(24);
                 doc.setTextColor(233, 30, 99); // NCubed roze
-                doc.text('NCubed', 70, 30);
+                doc.text('NCubed Laadkosten', 20, 30);
                 
                 // Factuurgegevens
                 const invoiceNumber = `INV-${year}-W${String(week).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
                 
-                // Afzender gegevens (links)
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-                doc.text([
-                    'René Lutjenkossink',
-                    'Wilhelminastraat 73',
-                    '7001 GV Doetinchem',
-                    'Tel: +31 (0)610750680',
-                    'E-mail: rene.lutjenkossink@ncubed.nl',
-                    'IBAN: NL21RABO 0370019466'
-                ], 20, 60);
-                
-                // Ontvanger gegevens (rechts)
-                doc.text([
-                    'Ncubed B.V.',
-                    'Van Deventerlaan 30-40',
-                    '3528 AE Utrecht',
-                    't.a.v. Rob Visser'
-                ], 120, 60);
-                
-                // Factuurnummer, datum en weeknummer
+                // Factuurdetails
                 doc.setFontSize(12);
-                doc.text(`Factuurnummer: ${invoiceNumber}`, 20, 100);
-                doc.text(`Datum: ${formattedDate}`, 20, 110);
-                doc.text(`Week: ${week}`, 20, 120);
-                doc.text(`Kenteken: HKX-39-V`, 20, 130);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Factuurnummer: ${invoiceNumber}`, 20, 50);
+                doc.text(`Datum: ${formattedDate}`, 20, 60);
+                doc.text(`Week: ${week}`, 20, 70);
+                doc.text(`Kenteken: HKX-39-V`, 20, 80);
                 
                 // Tabel met laadkosten
                 const tableData = Array.from(document.querySelectorAll('#invoiceBody tr')).map(row => 
@@ -483,7 +449,7 @@
                 );
 
                 doc.autoTable({
-                    startY: 140,
+                    startY: 90,
                     head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
                     body: tableData,
                     headStyles: {
@@ -510,16 +476,6 @@
                 const finalY = doc.lastAutoTable.finalY + 10;
                 doc.text(`Totaal kWh: ${totalKwh.toFixed(2)} kWh`, 20, finalY);
                 doc.text(`Totaalbedrag: ${totalAmount}`, 20, finalY + 10);
-                
-                // Betalingsgegevens
-                doc.setFontSize(10);
-                doc.text([
-                    'Betalingsgegevens:',
-                    'IBAN: NL21RABO 0370019466',
-                    'T.n.v.: R. Lutjenkossink',
-                    `Factuurnummer: ${invoiceNumber}`,
-                    'Graag binnen 14 dagen na factuurdatum betalen.'
-                ], 20, finalY + 30);
                 
                 // Footer met weeknummer
                 const pageCount = doc.internal.getNumberOfPages();
@@ -552,6 +508,7 @@
     </script>
 </body>
 </html>
+
 
 
 
