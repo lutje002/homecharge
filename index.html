@@ -4,8 +4,16 @@
     <title>NCubed Laadkosten</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NCubed Laadkosten">
+    
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,6 +23,14 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
+        }
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
         }
         .upload-container {
             border: 2px dashed #ccc;
@@ -84,6 +100,22 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <svg class="logo" width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Achtergrond -->
+                <rect width="512" height="512" rx="128" fill="#E91E63"/>
+                
+                <!-- Laadpaal icoon (wit) -->
+                <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
+                
+                <!-- Bliksemschicht -->
+                <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
+                
+                <!-- Batterij indicator -->
+                <path d="M256 172c-55.228 0-100 44.772-100 100s44.772 100 100 100 100-44.772 100-100-44.772-100-100-100zm0 40c33.137 0 60 26.863 60 60s-26.863 60-60 60-60-26.863-60-60 26.863-60 60-60z" fill="white" fill-opacity="0.3"/>
+            </svg>
+        </div>
+
         <h1>NCubed Laadkosten</h1>
         
         <div class="upload-container" id="dropZone">
@@ -377,3 +409,4 @@
     </script>
 </body>
 </html>
+
