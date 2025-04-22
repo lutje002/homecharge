@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>NCubed Laadkosten</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-        
-        <!-- iOS meta tags -->
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="NCubed Laadkosten">
-        <meta name="theme-color" content="#E91E63">
-        
-        <!-- iOS icons -->
-        <link rel="apple-touch-icon" href=
+    <title>NCubed Laadkosten</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- iOS meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NCubed Laadkosten">
+    <meta name="theme-color" content="#E91E63">
+    
+    <!-- iOS icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMjgiIGZpbGw9IiNFOTFFNjMiLz48cGF0aCBkPSJNMjU2IDExMmMtODguMzY2IDAtMTYwIDcxLjYzNC0xNjAgMTYwczc
+xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA0MGM2Ni4yNzQgMCAxMjAgNTMuNzI2IDEyMCAxMjBzLTUzLjcyNiAxMjAtMTIwIDEyMC0xMjAtNTMuNzI2LTEyMC0xMjAgNTMuNzI2LTEyMCAxMjAtMTIweiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMjg4IDIzMmgtNjRsLTMyIDk2aDY0bC0xNiA3MiAxMTItMTIwaC02NGwzMi00OHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+">
 
-
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI4IiBmaWxsPSIjRTkxRTYzIi8+PHBhdGggZD0iTTE2IDdjLTUuNTIzIDAtMTAgNC40NzctMTAgMTBzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMjEuNTIzIDcgMTYgN3ptMCAyLjVjNC4xNDIgMCA3LjUgMy4zNTggNy41IDcuNXMtMy4zNTggNy41LTcuNSA3LjUtNy41LTMuMzU4LTcuNS03LjUgMy4zNTggNy41IDcuNS03LjV6IiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xOCAxNC41aC00bC0yIDZoNGwtMSA0LjUgNy03LjVoLTRsMi0zeiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=">
+
+    <!-- Required scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         :root {
             --ncubed-pink: #E91E63;
@@ -197,7 +201,7 @@
     <div class="container">
         <div class="header">
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMjgiIGZpbGw9IiNFOTFFNjMiLz48cGF0aCBkPSJNMjU2IDExMmMtODguMzY2IDAtMTYwIDcxLjYzNC0xNjAgMTYwczc
-xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA0MGM2Ni4yNzQgMCAxMjAgNTMuNzI2IDEyMCAxMjBzLTUzLjcyNiAxMjAtMTIwIDEyMC0xMjAtNTMuNzI2LTEyMC0xMjAgNTMuNzI2LTEyMCAxMjAtMTIweiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMjg4IDIzMmgtNjRsLTMyIDk2aDY0bC0xNiA3MiAxMTItMTIwaC02NGwzMi00OHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="NCubed Logo">
+1LjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA0MGM2Ni4yNzQgMCAxMjAgNTMuNzI2IDEyMCAxMjBzLTUzLjcyNiAxMjAtMTIwIDEyMC0xMjAtNTMuNzI2LTEyMC0xMjAgNTMuNzI2LTEyMCAxMjAtMTIweiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMjg4IDIzMmgtNjRsLTMyIDk2aDY0bC0xNiA3MiAxMTItMTIwaC02NGwzMi00OHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="NCubed Logo">
             <h1>NCubed Laadkosten</h1>
         </div>
         
@@ -238,7 +242,6 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
             <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
         </div>
     </div>
-
     <script>
         const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
         const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
@@ -426,39 +429,84 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
         }
 
         function generatePDF() {
-    // Initialiseer jsPDF correct
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    // Rest van de code blijft hetzelfde
-    const currentDate = new Date();
-    const { week, year } = getWeekNumber(currentDate);
-    const formattedDate = currentDate.toLocaleDateString('nl-NL');
-    
-    // Logo en andere elementen toevoegen zoals voorheen...
-    
-    try {
-        // NCubed Logo
-        const logoSvg = `
-        <svg width="200" height="50" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <rect width="512" height="512" rx="128" fill="#E91E63"/>
-            <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
-            <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
-        </svg>`;
-        
-        // Logo toevoegen
-        const imgData = 'data:image/svg+xml;base64,' + btoa(logoSvg);
-        doc.addImage(imgData, 'SVG', 20, 10, 40, 40);
-        
-        // Rest van de PDF generatie code...
-        
-        // Download de PDF
-        doc.save(`Laadkosten_HKX-39-V_W${String(week).padStart(2, '0')}_${year}.pdf`);
-    } catch (error) {
-        console.error('PDF generatie fout:', error);
-        alert('Er is een fout opgetreden bij het genereren van de PDF. Probeer het opnieuw.');
-    }
-};
+            if (typeof window.jspdf === 'undefined') {
+                alert('PDF library is niet correct geladen. Vernieuw de pagina en probeer het opnieuw.');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const currentDate = new Date();
+            const { week, year } = getWeekNumber(currentDate);
+            const formattedDate = currentDate.toLocaleDateString('nl-NL');
+            
+            // Logo toevoegen
+            const logoSvg = `
+            <svg width="200" height="50" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <rect width="512" height="512" rx="128" fill="#E91E63"/>
+                <path d="M256 112c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S344.366 112 256 112zm0 40c66.274 0 120 53.726 120 120s-53.726 120-120 120-120-53.726-120-120 53.726-120 120-120z" fill="white"/>
+                <path d="M288 232h-64l-32 96h64l-16 72 112-120h-64l32-48z" fill="white"/>
+            </svg>`;
+            
+            const imgData = 'data:image/svg+xml;base64,' + btoa(logoSvg);
+            doc.addImage(imgData, 'SVG', 20, 10, 40, 40);
+            
+            // Header met bedrijfsnaam
+            doc.setFontSize(24);
+            doc.setTextColor(233, 30, 99); // NCubed roze
+            doc.text('NCubed', 70, 30);
+            
+            // Factuurgegevens
+            const invoiceNumber = `INV-${year}-W${String(week).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+            
+            // Afzender gegevens (links)
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text([
+                'René Lutjenkossink',
+                'Wilhelminastraat 73',
+                '7001 GV Doetinchem',
+                'Tel: +31 (0)610750680',
+                'E-mail: rene.lutjenkossink@ncubed.nl',
+                'IBAN: NL21RABO 0370019466'
+            ], 20, 60);
+            
+            // Ontvanger gegevens (rechts)
+            doc.text([
+                'Ncubed B.V.',
+                'Van Deventerlaan 30-40',
+                '3528 AE Utrecht',
+                't.a.v. Rob Visser'
+            ], 120, 60);
+            
+            // Factuurnummer, datum en weeknummer
+            doc.setFontSize(12);
+            doc.text(`Factuurnummer: ${invoiceNumber}`, 20, 100);
+            doc.text(`Datum: ${formattedDate}`, 20, 110);
+            doc.text(`Week: ${week}`, 20, 120);
+            doc.text(`Kenteken: HKX-39-V`, 20, 130);
+            
+            // Tabel met laadkosten
+            doc.autoTable({
+                startY: 140,
+                head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
+                body: Array.from(document.querySelectorAll('#invoiceBody tr')).map(row => 
+                    Array.from(row.cells).map(cell => cell.textContent)
+                ),
+                headStyles: {
+                    fillColor: [233, 30, 99], // NCubed roze
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold'
+                },
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 5
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                }
+            });
             
             // Totalen
             const totalKwh = Array.from(document.querySelectorAll('#invoiceBody tr')).reduce((sum, row) => {
@@ -489,7 +537,7 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
                 doc.text(`Pagina ${i} van ${pageCount} | Week ${week}, ${year}`, doc.internal.pageSize.width - 60, doc.internal.pageSize.height - 10);
             }
             
-            // Download PDF met weeknummer in bestandsnaam
+            // Download PDF
             doc.save(`Laadkosten_HKX-39-V_W${String(week).padStart(2, '0')}_${year}.pdf`);
         }
 
@@ -508,10 +556,3 @@ xLjYzNCAxNjAgMTYwIDE2MCAxNjAtNzEuNjM0IDE2MC0xNjBTMzQ0LjM2NiAxMTIgMjU2IDExMnptMCA
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
