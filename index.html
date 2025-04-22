@@ -3,205 +3,88 @@
 <head>
     <title>NCubed Laadkosten</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- iOS meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="NCubed Laadkosten">
-    <meta name="theme-color" content="#E91E63">
-    
-    <!-- iOS icons -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI4IiBmaWxsPSIjRTkxRTYzIi8+CiAgPHBhdGggZD0iTTE2IDdjLTUuNTIzIDAtMTAgNC40NzctMTAgMTBzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMjEuNTIzIDcgMTYgN3ptMCAyLjVjNC4xNDIgMCA3LjUgMy4zNTggNy41IDcuNXMtMy4zNTggNy41LTcuNSA3LjUtNy41LTMuMzU4LTcuNS03LjUgMy4zNTgtNy41IDcuNS03LjV6IiBmaWxsPSJ3aGl0ZSIvPgogIDxwYXRoIGQ9Ik0xOCAxNC41aC00bC0yIDZoNGwtMSA0LjUgNy03LjVoLTRsMi0zeiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI4IiBmaWxsPSIjRTkxRTYzIi8+CiAgPHBhdGggZD0iTTE2IDdjLTUuNTIzIDAtMTAgNC40NzctMTAgMTBzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMjEuNTIzIDcgMTYgN3ptMCAyLjVjNC4xNDIgMCA3LjUgMy4zNTggNy41IDcuNXMtMy4zNTggNy41LTcuNSA3LjUtNy41LTMuMzU4LTcuNS03LjUgMy4zNTgtNy41IDcuNS03LjV6IiBmaWxsPSJ3aGl0ZSIvPgogIDxwYXRoIGQ9Ik0xOCAxNC41aC00bC0yIDZoNGwtMSA0LjUgNy03LjVoLTRsMi0zeiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+">
-
-    <!-- Required scripts -->
-    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
-        :root {
-            --ncubed-pink: #E91E63;
-            --ncubed-pink-light: #ff4081;
-            --ncubed-pink-dark: #c2185b;
-        }
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header img {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-        }
-
-        .header h1 {
-            color: var(--ncubed-pink);
-            margin: 0;
-        }
-
         .upload-container {
             border: 2px dashed #ccc;
             padding: 20px;
             text-align: center;
             margin: 20px 0;
-            border-radius: 8px;
-            transition: all 0.3s ease;
         }
-
         .dragover {
             background-color: #e1f5fe;
-            border-color: var(--ncubed-pink);
+            border-color: #2196F3;
         }
-
         button {
-            background-color: var(--ncubed-pink);
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin: 5px;
-            transition: background-color 0.3s ease;
         }
-
-        button:hover {
-            background-color: var(--ncubed-pink-dark);
-        }
-
         .clear-button {
             background-color: #f44336;
         }
-
-        .clear-button:hover {
-            background-color: #d32f2f;
-        }
-
         .mail-button {
             background-color: #2196F3;
         }
-
-        .mail-button:hover {
-            background-color: #1976D2;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            background-color: white;
         }
-
         th, td {
             border: 1px solid #ddd;
-            padding: 12px 8px;
+            padding: 8px;
             text-align: left;
         }
-
         th {
-            background-color: var(--ncubed-pink);
-            color: white;
+            background-color: #f2f2f2;
         }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
         .preview-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin: 10px 0;
         }
-
         .preview-image {
             width: 150px;
             height: 150px;
             object-fit: contain;
             border: 1px solid #ddd;
             padding: 3px;
-            border-radius: 4px;
-            background-color: white;
         }
-
         #loadingIndicator {
             display: none;
             text-align: center;
             margin: 10px 0;
-            color: var(--ncubed-pink);
         }
-
         .error-message {
-            color: #f44336;
+            color: red;
             display: none;
             margin: 10px 0;
             padding: 10px;
             background-color: #ffebee;
             border: 1px solid #ffcdd2;
-            border-radius: 4px;
-        }
-
-        .price-input {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-        }
-
-        .price-input input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 100px;
-        }
-
-        .price-input label {
-            margin-right: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-
-            table {
-                font-size: 14px;
-            }
-
-            .preview-image {
-                width: 100px;
-                height: 100px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI4IiBmaWxsPSIjRTkxRTYzIi8+CiAgPHBhdGggZD0iTTE2IDdjLTUuNTIzIDAtMTAgNC40NzctMTAgMTBzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMjEuNTIzIDcgMTYgN3ptMCAyLjVjNC4xNDIgMCA3LjUgMy4zNTggNy41IDcuNXMtMy4zNTggNy41LTcuNSA3LjUtNy41LTMuMzU4LTcuNS03LjUgMy4zNTgtNy41IDcuNS03LjV6IiBmaWxsPSJ3aGl0ZSIvPgogIDxwYXRoIGQ9Ik0xOCAxNC41aC00bC0yIDZoNGwtMSA0LjUgNy03LjVoLTRsMi0zeiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="NCubed Logo">
-            <h1>NCubed Laadkosten</h1>
-        </div>
+        <h1>NCubed Laadkosten</h1>
         
         <div class="upload-container" id="dropZone">
             <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
@@ -240,6 +123,7 @@
             <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
         </div>
     </div>
+
     <script>
         const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
         const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
@@ -250,6 +134,7 @@
         const errorElement = document.getElementById('error');
         let processedData = [];
 
+        // Drag and drop handlers
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -415,128 +300,66 @@
             errorElement.style.display = 'block';
         }
 
-        function getWeekNumber(d) {
-            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-            const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-            const weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-            return {
-                week: weekNo,
-                year: d.getUTCFullYear()
-            };
+        function getWeekNumber(date) {
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
         }
 
         function generatePDF() {
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                const currentDate = new Date();
-                const { week, year } = getWeekNumber(currentDate);
-                const formattedDate = currentDate.toLocaleDateString('nl-NL');
-                
-                // Logo toevoegen
-                const logoSvg = `
-                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="32" height="32" rx="8" fill="#E91E63"/>
-                    <path d="M16 7c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10S21.523 7 16 7zm0 2.5c4.142 0 7.5 3.358 7.5 7.5s-3.358 7.5-7.5 7.5-7.5-3.358-7.5-7.5 3.358-7.5 7.5-7.5z" fill="white"/>
-                    <path d="M18 14.5h-4l-2 6h4l-1 4.5 7-7.5h-4l2-3z" fill="white"/>
-                </svg>`;
-                
-                const imgData = 'data:image/svg+xml;base64,' + btoa(logoSvg);
-                doc.addImage(imgData, 'SVG', 20, 10, 40, 40);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
             
-            // Header met bedrijfsnaam
-            doc.setFontSize(24);
-            doc.setTextColor(233, 30, 99); // NCubed roze
-            doc.text('NCubed', 70, 30);
+            const currentDate = new Date();
+            const weekNumber = getWeekNumber(currentDate);
+            const formattedDate = currentDate.toLocaleDateString('nl-NL');
             
-            // Factuurgegevens
-            const invoiceNumber = `INV-${year}-W${String(week).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+            // Titel
+            doc.setFontSize(16);
+            doc.text('Laadkosten Overzicht', 20, 20);
             
-            // Afzender gegevens (links)
+            // Afzender informatie
             doc.setFontSize(10);
-            doc.setTextColor(0, 0, 0);
             doc.text([
+                'Afzender:',
                 'René Lutjenkossink',
                 'Wilhelminastraat 73',
                 '7001 GV Doetinchem',
                 'Tel: +31 (0)610750680',
                 'E-mail: rene.lutjenkossink@ncubed.nl',
                 'IBAN: NL21RABO 0370019466'
-            ], 20, 60);
+            ], 20, 35);
             
-            // Ontvanger gegevens (rechts)
+            // Ontvanger informatie
             doc.text([
+                'Ontvanger:',
                 'Ncubed B.V.',
                 'Van Deventerlaan 30-40',
                 '3528 AE Utrecht',
                 't.a.v. Rob Visser'
-            ], 120, 60);
+            ], 120, 35);
             
-            // Factuurnummer, datum en weeknummer
+            // Factuurdetails
             doc.setFontSize(12);
-            doc.text(`Factuurnummer: ${invoiceNumber}`, 20, 100);
-            doc.text(`Datum: ${formattedDate}`, 20, 110);
-            doc.text(`Week: ${week}`, 20, 120);
-            doc.text(`Kenteken: HKX-39-V`, 20, 130);
+            doc.text(`Datum: ${formattedDate}`, 20, 85);
+            doc.text(`Week: ${weekNumber}`, 20, 92);
+            doc.text(`Kenteken: HKX-39-V`, 20, 99);
             
-            // Tabel met laadkosten
+            // Tabel met roze headers
             doc.autoTable({
-                startY: 140,
+                startY: 105,
                 head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
                 body: Array.from(document.querySelectorAll('#invoiceBody tr')).map(row => 
                     Array.from(row.cells).map(cell => cell.textContent)
                 ),
                 headStyles: {
-                    fillColor: [233, 30, 99], // NCubed roze
-                    textColor: [255, 255, 255],
-                    fontStyle: 'bold'
-                },
-                styles: {
-                    fontSize: 10,
-                    cellPadding: 5
-                },
-                alternateRowStyles: {
-                    fillColor: [245, 245, 245]
+                    fillColor: [255, 192, 203] // Roze kleur voor de headers
                 }
             });
-            } catch (error) {
-                console.error('PDF Generation Error:', error);
-                alert('Er is een fout opgetreden bij het genereren van de PDF. Controleer de console voor details.');
-            }
-        }
-            // Totalen
-            const totalKwh = Array.from(document.querySelectorAll('#invoiceBody tr')).reduce((sum, row) => {
-                return sum + parseFloat(row.cells[2].textContent || 0);
-            }, 0);
             
-            const totalAmount = document.getElementById('invoiceTotal').textContent;
+            doc.text(`Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`, 20, doc.lastAutoTable.finalY + 10);
             
-            const finalY = doc.lastAutoTable.finalY + 10;
-            doc.text(`Totaal kWh: ${totalKwh.toFixed(2)} kWh`, 20, finalY);
-            doc.text(`Totaalbedrag: ${totalAmount}`, 20, finalY + 10);
-            
-            // Betalingsgegevens
-            doc.setFontSize(10);
-            doc.text([
-                'Betalingsgegevens:',
-                'IBAN: NL21RABO 0370019466',
-                'T.n.v.: R. Lutjenkossink',
-                `Factuurnummer: ${invoiceNumber}`,
-                'Graag binnen 14 dagen na factuurdatum betalen.'
-            ], 20, finalY + 30);
-            
-            // Footer met weeknummer
-            const pageCount = doc.internal.getNumberOfPages();
-            doc.setFontSize(8);
-            for(let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.text(`Pagina ${i} van ${pageCount} | Week ${week}, ${year}`, doc.internal.pageSize.width - 60, doc.internal.pageSize.height - 10);
-            }
-            
-            // Download PDF
-            doc.save(`Laadkosten_HKX-39-V_W${String(week).padStart(2, '0')}_${year}.pdf`);
+            doc.save(`Laadkosten_HKX-39-V_Week${weekNumber}_${formattedDate.replace(/\//g, '-')}.pdf`);
         }
 
         function sendEmailOnly() {
@@ -544,10 +367,10 @@
                 return sum + parseFloat(row.cells[2].textContent || 0);
             }, 0);
             
-            const currentDate = new Date();
-            const { week, year } = getWeekNumber(currentDate);
+            const currentDate = new Date().toLocaleDateString('nl-NL');
+            const weekNumber = getWeekNumber(new Date());
             
-            const mailtoLink = `mailto:invoices@ncubed.nl?cc=r.lutjenkossink@ncubed.nl&subject=Laadkosten Week ${week}, ${year} (HKX-39-V)&body=Beste,%0D%0A%0D%0AHierbij het overzicht van de laadkosten voor kenteken HKX-39-V.%0D%0A%0D%0ASamenvatting:%0D%0A- Week: ${week}%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
+            const mailtoLink = `mailto:invoices@ncubed.nl?cc=r.lutjenkossink@ncubed.nl&subject=Laadkosten Week ${weekNumber} (HKX-39-V)&body=Beste,%0D%0A%0D%0AHierbij het overzicht van de laadkosten voor kenteken HKX-39-V.%0D%0A%0D%0ASamenvatting:%0D%0A- Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A- Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0AMet vriendelijke groet,%0D%0ARené Lutjenkossink`;
             
             window.location.href = mailtoLink;
         }
