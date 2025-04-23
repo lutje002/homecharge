@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
   <title>NCubed Laadkosten</title>
@@ -213,12 +213,6 @@
 
       <h1>NCubed Laadkosten</h1>
 
-      <div class="upload-container" id="dropZone">
-          <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
-          <button onclick="document.getElementById('photoInput').click()" class="upload-button">Upload Screenshot(s)</button>
-          <p>Of sleep afbeeldingen hierheen</p>
-      </div>
-
       <div class="filter-controls">
           <div class="price-input">
               <label for="pricePerKwh">Prijs per kWh: €</label>
@@ -231,6 +225,12 @@
               <input type="date" id="endDate" onchange="filterTableByDateRange()">
           </div>
           <button onclick="clearAll()" class="clear-button">Clear Alles</button>
+      </div>
+
+      <div class="upload-container" id="dropZone">
+          <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
+          <button onclick="document.getElementById('photoInput').click()" class="upload-button">Upload Screenshot(s)</button>
+          <p>Of sleep afbeeldingen hierheen</p>
       </div>
 
       <div id="previewContainer" class="preview-container"></div>
@@ -258,7 +258,6 @@
           <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
       </div>
   </div>
-
   <script>
       const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
       const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
@@ -399,7 +398,7 @@
                           content: [
                               {
                                   type: "text",
-                                  text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies. Format per sessie: datum, kWh"
+                                  text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies in het volgende formaat: DD/MM/YYYY, XX kWh (één sessie per regel, zonder streepjes of bullets)"
                               },
                               {
                                   type: "image_url",
