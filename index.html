@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
   <html lang="nl">
   <head>
       <title>NCubed Laadkosten</title>
@@ -271,17 +271,31 @@
               <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
           </div>
       </div>
-      <script>
+          <script>
           const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
           const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
-          
-          const dropZone = document.getElementById('dropZone');
-          const photoInput = document.getElementById('photoInput');
-          const loadingIndicator = document.getElementById('loadingIndicator');
-          const errorElement = document.getElementById('error');
           let processedData = [];
 
-          // Event Listeners
+          // Initialize when DOM is loaded
+          document.addEventListener('DOMContentLoaded', function() {
+              console.log("Page loaded");
+              // Set default dates
+              const today = new Date();
+              const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1));
+              const sunday = new Date(today.setDate(today.getDate() - today.getDay() + 7));
+              
+              document.getElementById('startDate').value = formatDate(monday);
+              document.getElementById('endDate').value = formatDate(sunday);
+              
+              // Initialize the table
+              console.log("Initializing table");
+              updateTable();
+          });
+
+          // Event Listeners for drag and drop
+          const dropZone = document.getElementById('dropZone');
+          const photoInput = document.getElementById('photoInput');
+
           dropZone.addEventListener('dragover', (e) => {
               e.preventDefault();
               dropZone.classList.add('dragover');
@@ -301,100 +315,48 @@
               handleFiles(e.target.files);
           });
 
-          // Initialize date range and table on page load
-          window.onload = function() {
-              // Eerst de datums instellen
-              const now = new Date();
-              const currentDay = now.getDay();
-              
-              const monday = new Date(now);
-              monday.setDate(now.getDate() - currentDay + (currentDay === 0 ? -6 : 1));
-              
-              const sunday = new Date(monday);
-              sunday.setDate(monday.getDate() + 6);
-              
-              // Datums instellen in de input velden
-              document.getElementById('startDate').value = formatDate(monday);
-              document.getElementById('endDate').value = formatDate(sunday);
-              
-              // Direct de tabel updaten
-              updateTable();
-          };
-
-          function formatDate(date) {
-              const d = new Date(date);
-              let month = '' + (d.getMonth() + 1);
-              let day = '' + d.getDate();
-              const year = d.getFullYear();
-
-              if (month.length < 2) month = '0' + month;
-              if (day.length < 2) day = '0' + day;
-
-              return [year, month, day].join('-');
-          }
-
-          function clearAll() {
-              document.getElementById('previewContainer').innerHTML = '';
-              document.getElementById('invoiceBody').innerHTML = '';
-              document.getElementById('invoiceTotal').textContent = '€0,00';
-              processedData = [];
-              photoInput.value = '';
-              const now = new Date();
-              document.getElementById('startDate').value = formatDate(now);
-              document.getElementById('endDate').value = formatDate(now);
-              updateTable();
-          }
-
           function updateTable() {
+              console.log("Updating table");
               const invoiceBody = document.getElementById('invoiceBody');
-              const startDate = new Date(document.getElementById('startDate').value);
-              const endDate = new Date(document.getElementById('endDate').value);
-              endDate.setHours(23, 59, 59);
+              const pricePerKwh = parseFloat(document.getElementById('pricePerKwh').value) || 0.35;
+              
+              // Hardcoded sample data
+              const sampleData = [
+                  { date: '2024-04-22', kwh: 12.5 },
+                  { date: '2024-04-24', kwh: 15.2 },
+                  { date: '2024-04-26', kwh: 18.7 }
+              ];
               
               let tableContent = '';
               let totalAmount = 0;
-              const pricePerKwh = parseFloat(document.getElementById('pricePerKwh').value);
-
-              // Voorbeelddata voor de huidige week
-              const sampleData = [
-                  { date: '22-04-2024', kwh: 12.5 },
-                  { date: '24-04-2024', kwh: 15.2 },
-                  { date: '26-04-2024', kwh: 18.7 }
-              ];
-
-              // Genereer tabelrijen voor de voorbeelddata
+              
+              // Add sample data rows
               sampleData.forEach(item => {
-                  const [day, month, year] = item.date.split('-');
-                  const rowDate = new Date(year, month - 1, day);
+                  const amount = item.kwh * pricePerKwh;
+                  totalAmount += amount;
                   
-                  if (rowDate >= startDate && rowDate <= endDate) {
-                      const amount = item.kwh * pricePerKwh;
-                      totalAmount += amount;
-                      
-                      tableContent += `
-                          <tr>
-                              <td>${item.date}</td>
-                              <td>Thuisladen elektrische auto (HKX-39-V)</td>
-                              <td>${item.kwh.toFixed(2)}</td>
-                              <td>€${pricePerKwh.toFixed(2)}</td>
-                              <td>€${amount.toFixed(2)}</td>
-                          </tr>
-                      `;
-                  }
+                  const formattedDate = item.date.split('-').reverse().join('-'); // Convert to DD-MM-YYYY
+                  
+                  tableContent += `
+                      <tr>
+                          <td>${formattedDate}</td>
+                          <td>Thuisladen elektrische auto (HKX-39-V)</td>
+                          <td>${item.kwh.toFixed(2)}</td>
+                          <td>€${pricePerKwh.toFixed(2)}</td>
+                          <td>€${amount.toFixed(2)}</td>
+                      </tr>
+                  `;
               });
-
-              // Voeg eventuele verwerkte data toe
-              processedData.forEach(content => {
-                  const lines = content.split('\n');
-                  lines.forEach(line => {
-                      if (line.includes(',')) {
-                          const [date, kwh] = line.split(',').map(item => item.trim());
-                          const kwhValue = parseFloat(kwh);
-                          if (!isNaN(kwhValue)) {
-                              const [day, month, year] = date.split('-');
-                              const rowDate = new Date(year, month - 1, day);
-                              
-                              if (rowDate >= startDate && rowDate <= endDate) {
+              
+              // Add processed data if any exists
+              if (processedData.length > 0) {
+                  processedData.forEach(content => {
+                      const lines = content.split('\n');
+                      lines.forEach(line => {
+                          if (line.includes(',')) {
+                              const [date, kwh] = line.split(',').map(item => item.trim());
+                              const kwhValue = parseFloat(kwh);
+                              if (!isNaN(kwhValue)) {
                                   const amount = kwhValue * pricePerKwh;
                                   totalAmount += amount;
                                   
@@ -409,17 +371,32 @@
                                   `;
                               }
                           }
-                      }
+                      });
                   });
-              });
-
-              // Update de tabel en het totaalbedrag
+              }
+              
+              // Update the table and total
+              console.log("Setting table content:", tableContent);
               invoiceBody.innerHTML = tableContent;
               document.getElementById('invoiceTotal').textContent = `€${totalAmount.toFixed(2)}`;
           }
 
+          function formatDate(date) {
+              const d = new Date(date);
+              let month = '' + (d.getMonth() + 1);
+              let day = '' + d.getDate();
+              const year = d.getFullYear();
+
+              if (month.length < 2) month = '0' + month;
+              if (day.length < 2) day = '0' + day;
+
+              return [year, month, day].join('-');
+          }
+
           async function handleFiles(files) {
               const previewContainer = document.getElementById('previewContainer');
+              const loadingIndicator = document.getElementById('loadingIndicator');
+              const errorElement = document.getElementById('error');
               
               for (const file of files) {
                   if (file.type.startsWith('image/')) {
@@ -432,93 +409,92 @@
                               img.className = 'preview-image';
                               previewContainer.appendChild(img);
                               
-                              await processImage(e.target.result);
+                              loadingIndicator.style.display = 'block';
+                              errorElement.style.display = 'none';
+                              
+                              try {
+                                  const base64Image = e.target.result.split(',')[1];
+                                  const formData = new FormData();
+                                  formData.append('image', base64Image);
+                                  
+                                  const uploadResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                                      method: 'POST',
+                                      body: formData
+                                  });
+                                  
+                                  if (!uploadResponse.ok) {
+                                      throw new Error('Fout bij uploaden afbeelding');
+                                  }
+                                  
+                                  const uploadResult = await uploadResponse.json();
+                                  const imageUrl = uploadResult.data.url;
+                                  
+                                  const response = await fetch('https://old-voice-773e.r-lutjenkossink.workers.dev/monica', {
+                                      method: 'POST',
+                                      headers: {
+                                          'Content-Type': 'application/json',
+                                          'Authorization': `Bearer ${MONICA_API_KEY}`
+                                      },
+                                      body: JSON.stringify({
+                                          model: "gpt-4o",
+                                          messages: [{
+                                              role: "user",
+                                              content: [
+                                                  {
+                                                      type: "text",
+                                                      text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies. Format per sessie: datum, kWh"
+                                                  },
+                                                  {
+                                                      type: "image_url",
+                                                      image_url: {
+                                                          url: imageUrl
+                                                      }
+                                                  }
+                                              ]
+                                          }]
+                                      })
+                                  });
+
+                                  if (!response.ok) {
+                                      throw new Error('Fout bij analyse van de afbeelding');
+                                  }
+                                  
+                                  const data = await response.json();
+                                  processedData.push(data.choices[0].message.content);
+                                  updateTable();
+                                  
+                              } catch (error) {
+                                  console.error('Error:', error);
+                                  errorElement.textContent = 'Fout bij verwerking: ' + error.message;
+                                  errorElement.style.display = 'block';
+                              } finally {
+                                  loadingIndicator.style.display = 'none';
+                              }
                           };
                           
                           reader.readAsDataURL(file);
                       } catch (error) {
-                          showError(`Fout bij verwerken van bestand: ${file.name}`);
+                          console.error('Error:', error);
+                          errorElement.textContent = `Fout bij verwerken van bestand: ${file.name}`;
+                          errorElement.style.display = 'block';
                       }
                   }
               }
           }
 
-          async function processImage(imageData) {
-              try {
-                  loadingIndicator.style.display = 'block';
-                  errorElement.style.display = 'none';
-                  
-                  const base64Image = imageData.split(',')[1];
-                  const formData = new FormData();
-                  formData.append('image', base64Image);
-                  
-                  const uploadResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                      method: 'POST',
-                      body: formData
-                  });
-                  
-                  if (!uploadResponse.ok) {
-                      throw new Error('Fout bij uploaden afbeelding');
-                  }
-                  
-                  const uploadResult = await uploadResponse.json();
-                  const imageUrl = uploadResult.data.url;
-                  
-                  const response = await fetch('https://old-voice-773e.r-lutjenkossink.workers.dev/monica', {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${MONICA_API_KEY}`
-                      },
-                      body: JSON.stringify({
-                          model: "gpt-4o",
-                          messages: [{
-                              role: "user",
-                              content: [
-                                  {
-                                      type: "text",
-                                      text: "Analyseer deze laadsessie. Geef alleen de thuislaadsessies. Format per sessie: datum, kWh"
-                                  },
-                                  {
-                                      type: "image_url",
-                                      image_url: {
-                                          url: imageUrl
-                                      }
-                                  }
-                              ]
-                          }]
-                      })
-                  });
-
-                  if (!response.ok) {
-                      throw new Error('Fout bij analyse van de afbeelding');
-                  }
-                  
-                  const data = await response.json();
-                  processedData.push(data.choices[0].message.content);
-                  updateTable();
-                  
-              } catch (error) {
-                  console.error('Error:', error);
-                  showError('Fout bij verwerking: ' + error.message);
-              } finally {
-                  loadingIndicator.style.display = 'none';
-              }
-          }
-
-          function showError(message) {
-              errorElement.textContent = message;
-              errorElement.style.display = 'block';
+          function clearAll() {
+              document.getElementById('previewContainer').innerHTML = '';
+              processedData = [];
+              updateTable();
+              document.getElementById('photoInput').value = '';
           }
 
           function generatePDF() {
               const { jsPDF } = window.jspdf;
               const doc = new jsPDF();
               
-              const startDate = new Date(document.getElementById('startDate').value);
-              const endDate = new Date(document.getElementById('endDate').value);
-              const formattedStartDate = startDate.toLocaleDateString('nl-NL');
-              const formattedEndDate = endDate.toLocaleDateString('nl-NL');
+              const startDate = document.getElementById('startDate').value;
+              const endDate = document.getElementById('endDate').value;
               
               // Titel
               doc.setFontSize(16);
@@ -547,7 +523,7 @@
               
               // Factuurdetails
               doc.setFontSize(12);
-              doc.text(`Periode: ${formattedStartDate} t/m ${formattedEndDate}`, 20, 85);
+              doc.text(`Periode: ${startDate} t/m ${endDate}`, 20, 85);
               doc.text(`Kenteken: HKX-39-V`, 20, 92);
               
               // Tabel
@@ -565,15 +541,12 @@
               
               doc.text(`Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`, 20, doc.lastAutoTable.finalY + 10);
               
-              const dateStr = formattedStartDate.replace(/\//g, '-');
-              doc.save(`Laadkosten_HKX-39-V_${dateStr}.pdf`);
+              doc.save(`Laadkosten_HKX-39-V_${startDate}.pdf`);
           }
 
           function sendEmailOnly() {
-              const startDate = new Date(document.getElementById('startDate').value);
-              const endDate = new Date(document.getElementById('endDate').value);
-              const formattedStartDate = startDate.toLocaleDateString('nl-NL');
-              const formattedEndDate = endDate.toLocaleDateString('nl-NL');
+              const startDate = document.getElementById('startDate').value;
+              const endDate = document.getElementById('endDate').value;
               
               const filteredRows = Array.from(document.querySelectorAll('#invoiceBody tr'));
               const totalKwh = filteredRows.reduce((sum, row) => {
@@ -581,10 +554,10 @@
               }, 0);
               
               const mailtoLink = `mailto:invoices@ncubed.nl?cc=rene.lutjenkossink@ncubed.nl
-                  &subject=Laadkosten ${formattedStartDate} t/m ${formattedEndDate} (HKX-39-V)
+                  &subject=Laadkosten ${startDate} t/m ${endDate} (HKX-39-V)
                   &body=Beste,%0D%0A%0D%0A
                   Hierbij het overzicht van de laadkosten voor kenteken HKX-39-V.%0D%0A%0D%0A
-                  Periode: ${formattedStartDate} t/m ${formattedEndDate}%0D%0A
+                  Periode: ${startDate} t/m ${endDate}%0D%0A
                   Samenvatting:%0D%0A
                   - Totaal kWh: ${totalKwh.toFixed(2)}%0D%0A
                   - Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}%0D%0A%0D%0A
