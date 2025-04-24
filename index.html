@@ -19,16 +19,30 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://lutje002.github.io/homecharge/ncubed-power.png">
 
+  <!-- PDF Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   
   <style>
+      :root {
+          --primary-color: #E91E63;
+          --primary-dark: #C2185B;
+          --error-color: #f44336;
+          --success-color: #4CAF50;
+          --info-color: #2196F3;
+          --background-color: #f5f5f5;
+          --border-color: #ddd;
+          --text-color: #333;
+      }
+
       body {
           font-family: Arial, sans-serif;
           margin: 0;
           padding: 20px;
-          background-color: #f5f5f5;
+          background-color: var(--background-color);
+          color: var(--text-color);
       }
+
       .container {
           max-width: 1200px;
           margin: 0 auto;
@@ -37,47 +51,73 @@
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
+
       .logo-container {
           text-align: center;
           margin: 20px 0;
       }
+
       .logo {
           width: 100px;
           height: 100px;
+          transition: transform 0.3s ease;
       }
-      h1 {
+
+      .logo:hover {
+          transform: scale(1.1);
+      }
+
+      h1, h2 {
           text-align: center;
-          color: #333;
+          color: var(--text-color);
           margin-bottom: 20px;
       }
+
       .upload-container {
-          border: 2px dashed #ccc;
+          border: 2px dashed var(--border-color);
           padding: 20px;
           text-align: center;
           margin: 20px 0;
           border-radius: 8px;
-          background-color: #fff;
+          background-color: white;
           transition: all 0.3s ease;
       }
+
       .upload-container.dragover {
-          border-color: #E91E63;
+          border-color: var(--primary-color);
           background-color: #fce4ec;
       }
+
       .preview-container {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
           gap: 10px;
           margin: 20px 0;
       }
+
+      .preview-image-wrapper {
+          position: relative;
+          padding-top: 100%;
+      }
+
       .preview-image {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
-          height: 150px;
+          height: 100%;
           object-fit: contain;
-          border: 1px solid #ddd;
+          border: 1px solid var(--border-color);
           border-radius: 4px;
           padding: 3px;
           background-color: white;
+          transition: transform 0.3s ease;
       }
+
+      .preview-image:hover {
+          transform: scale(1.05);
+      }
+
       .filter-controls {
           display: flex;
           flex-wrap: wrap;
@@ -88,114 +128,210 @@
           padding: 15px;
           border-radius: 8px;
       }
+
       .price-input {
           display: flex;
           align-items: center;
           gap: 10px;
       }
+
       .price-input input {
           width: 80px;
           padding: 8px;
-          border: 1px solid #ddd;
+          border: 1px solid var(--border-color);
           border-radius: 4px;
+          transition: border-color 0.3s ease;
       }
+
+      .price-input input:focus {
+          border-color: var(--primary-color);
+          outline: none;
+      }
+
       .date-range-filter {
           display: flex;
           align-items: center;
           gap: 10px;
           flex-wrap: wrap;
       }
+
       .date-range-filter input[type="date"] {
           padding: 8px;
-          border: 1px solid #ddd;
+          border: 1px solid var(--border-color);
           border-radius: 4px;
           font-family: inherit;
+          transition: border-color 0.3s ease;
       }
+
+      .date-range-filter input[type="date"]:focus {
+          border-color: var(--primary-color);
+          outline: none;
+      }
+
       button {
           color: white;
           border: none;
           padding: 10px 20px;
           border-radius: 4px;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          transition: all 0.3s ease;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
       }
+
       .upload-button {
-          background-color: #E91E63;
+          background-color: var(--primary-color);
       }
+
       .upload-button:hover {
-          background-color: #C2185B;
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
       }
+
       .clear-button {
-          background-color: #f44336;
+          background-color: var(--error-color);
       }
+
       .clear-button:hover {
           background-color: #d32f2f;
+          transform: translateY(-2px);
       }
+
       .download-button {
-          background-color: #2196F3;
+          background-color: var(--info-color);
       }
+
       .download-button:hover {
           background-color: #1976D2;
+          transform: translateY(-2px);
       }
+
       .mail-button {
-          background-color: #4CAF50;
+          background-color: var(--success-color);
       }
+
       .mail-button:hover {
           background-color: #388E3C;
+          transform: translateY(-2px);
       }
+
       table {
           width: 100%;
           border-collapse: collapse;
           margin: 20px 0;
           background-color: white;
+          border-radius: 4px;
+          overflow: hidden;
       }
+
       th, td {
           padding: 12px;
           text-align: left;
-          border-bottom: 1px solid #ddd;
+          border-bottom: 1px solid var(--border-color);
       }
+
       th {
-          background-color: #E91E63;
+          background-color: var(--primary-color);
           color: white;
+          font-weight: 600;
       }
+
       tr:nth-child(even) {
           background-color: #f8f9fa;
       }
+
       tr:hover {
           background-color: #fce4ec;
       }
+
       .error-message {
-          color: #f44336;
+          color: var(--error-color);
           background-color: #ffebee;
           padding: 10px;
           border-radius: 4px;
           margin: 10px 0;
           display: none;
+          animation: fadeIn 0.3s ease;
       }
+
       .loading-indicator {
           display: none;
           text-align: center;
           margin: 20px 0;
+          font-size: 24px;
       }
+
       .loading-indicator::after {
           content: "⚡";
           animation: pulse 1s infinite;
       }
+
       @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.3; }
-          100% { opacity: 1; }
+          0% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.3; transform: scale(0.8); }
+          100% { opacity: 1; transform: scale(1); }
       }
+
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
       @media (max-width: 768px) {
+          .container {
+              padding: 10px;
+          }
+
           .filter-controls {
               flex-direction: column;
               align-items: stretch;
           }
+
           .date-range-filter {
               flex-direction: column;
           }
+
           .date-range-filter input[type="date"] {
               width: 100%;
+          }
+
+          button {
+              width: 100%;
+              margin: 5px 0;
+          }
+
+          .preview-container {
+              grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          }
+      }
+
+      /* Dark mode support */
+      @media (prefers-color-scheme: dark) {
+          :root {
+              --background-color: #121212;
+              --text-color: #ffffff;
+              --border-color: #333;
+          }
+
+          .container {
+              background-color: #1e1e1e;
+          }
+
+          .upload-container {
+              background-color: #2d2d2d;
+          }
+
+          .preview-image {
+              background-color: #2d2d2d;
+          }
+
+          tr:nth-child(even) {
+              background-color: #2d2d2d;
+          }
+
+          tr:hover {
+              background-color: #3d3d3d;
           }
       }
   </style>
@@ -254,14 +390,18 @@
               <tbody id="invoiceBody"></tbody>
           </table>
           <p>Totaalbedrag: <span id="invoiceTotal">€0,00</span></p>
-          <button onclick="generatePDF()" class="download-button">Download PDF</button>
-          <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
+          <div class="button-group">
+              <button onclick="generatePDF()" class="download-button">Download PDF</button>
+              <button onclick="sendEmailOnly()" class="mail-button">Verstuur Mail</button>
+          </div>
       </div>
   </div>
+
   <script>
       const MONICA_API_KEY = 'sk-74PDyAlNKWSTMSF00qpvh0Z0WuGzpriVmWDBdMAUHED9PSmGLcMCZ4ByElHRwX7ch8wgghmnusYT2Zcb2QLpRbaG_heD';
       const IMGBB_API_KEY = '56fb3a05b4ed17c9e72b3cfb52caddb8';
       let processedData = [];
+      let uploadedImages = [];
 
       function initializeDateRange() {
           const today = new Date();
@@ -351,11 +491,17 @@
                   const reader = new FileReader();
                   
                   reader.onload = async (e) => {
+                      const imgWrapper = document.createElement('div');
+                      imgWrapper.className = 'preview-image-wrapper';
+                      
                       const img = document.createElement('img');
                       img.src = e.target.result;
                       img.className = 'preview-image';
-                      previewContainer.appendChild(img);
                       
+                      imgWrapper.appendChild(img);
+                      previewContainer.appendChild(imgWrapper);
+                      
+                      uploadedImages.push(e.target.result);
                       await processImage(e.target.result);
                   };
                   
@@ -508,11 +654,12 @@
           document.getElementById('invoiceTotal').textContent = '€0,00';
           document.getElementById('error').style.display = 'none';
           processedData = [];
+          uploadedImages = [];
           document.getElementById('photoInput').value = '';
           initializeDateRange();
       }
 
-      function generatePDF() {
+      async function generatePDF() {
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF();
           
@@ -521,9 +668,11 @@
           const formattedStartDate = startDate.toLocaleDateString('nl-NL');
           const formattedEndDate = endDate.toLocaleDateString('nl-NL');
           
+          // Header
           doc.setFontSize(16);
           doc.text('Laadkosten Overzicht', 20, 20);
           
+          // Afzender en ontvanger informatie
           doc.setFontSize(10);
           doc.text([
               'Afzender:',
@@ -543,12 +692,62 @@
               't.a.v. Rob Visser'
           ], 120, 35);
           
+          // Periode en kenteken
           doc.setFontSize(12);
           doc.text(`Periode: ${formattedStartDate} t/m ${formattedEndDate}`, 20, 85);
           doc.text(`Kenteken: HKX-39-V`, 20, 92);
+
+          // Voeg preview afbeeldingen toe
+          let currentY = 100;
           
+          if (uploadedImages.length > 0) {
+              doc.text('Laadbewijzen:', 20, currentY);
+              currentY += 10;
+
+              for (let i = 0; i < uploadedImages.length; i++) {
+                  if (currentY > 250) {
+                      doc.addPage();
+                      currentY = 20;
+                  }
+
+                  try {
+                      const img = new Image();
+                      img.src = uploadedImages[i];
+                      
+                      await new Promise((resolve) => {
+                          img.onload = () => {
+                              // Bereken de juiste afmetingen met behoud van aspect ratio
+                              const imgWidth = 170;
+                              const imgHeight = (img.height * imgWidth) / img.width;
+                              
+                              doc.addImage(
+                                  uploadedImages[i],
+                                  'JPEG',
+                                  20,
+                                  currentY,
+                                  imgWidth,
+                                  imgHeight,
+                                  `preview${i}`,
+                                  'MEDIUM'
+                              );
+                              
+                              currentY += imgHeight + 10;
+                              resolve();
+                          };
+                      });
+                  } catch (error) {
+                      console.error('Error adding image to PDF:', error);
+                  }
+              }
+              
+              // Voeg een nieuwe pagina toe voor de tabel
+              doc.addPage();
+              currentY = 20;
+          }
+
+          // Tabel met laadgegevens
           doc.autoTable({
-              startY: 100,
+              startY: currentY,
               head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
               body: Array.from(document.querySelectorAll('#invoiceBody tr'))
                   .filter(row => row.style.display !== 'none')
@@ -565,8 +764,14 @@
               }
           });
           
-          doc.text(`Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`, 20, doc.lastAutoTable.finalY + 10);
+          // Totaalbedrag
+          doc.text(
+              `Totaalbedrag: ${document.getElementById('invoiceTotal').textContent}`,
+              20,
+              doc.lastAutoTable.finalY + 10
+          );
           
+          // Bestandsnaam en opslaan
           const filename = `Laadkosten_HKX-39-V_${formattedStartDate.replace(/\//g, '-')}_tm_${formattedEndDate.replace(/\//g, '-')}.pdf`;
           doc.save(filename);
       }
