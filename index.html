@@ -697,62 +697,9 @@
     doc.text(`Periode: ${formattedStartDate} t/m ${formattedEndDate}`, 20, 85);
     doc.text(`Kenteken: HKX-39-V`, 20, 92);
 
-    // Voeg preview afbeeldingen toe
-    let currentY = 100;
-    const previewImages = document.querySelectorAll('.preview-image');
-    
-    if (previewImages.length > 0) {
-        doc.text('Laadbewijzen:', 20, currentY);
-        currentY += 10;
-
-        for (const img of previewImages) {
-            if (currentY > 250) {
-                doc.addPage();
-                currentY = 20;
-            }
-
-            try {
-                // Wacht tot de afbeelding volledig is geladen
-                await new Promise((resolve, reject) => {
-                    if (img.complete) {
-                        resolve();
-                    } else {
-                        img.onload = resolve;
-                        img.onerror = reject;
-                    }
-                });
-
-                // Bereken de juiste afmetingen met behoud van aspect ratio
-                const imgWidth = 170;
-                const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
-                
-                doc.addImage(
-                    img.src,
-                    'JPEG',
-                    20,
-                    currentY,
-                    imgWidth,
-                    imgHeight
-                );
-                
-                currentY += imgHeight + 10;
-            } catch (error) {
-                console.error('Error adding image to PDF:', error);
-                // Toon een foutmelding aan de gebruiker
-                const errorElement = document.getElementById('error');
-                errorElement.textContent = 'Fout bij het toevoegen van afbeelding aan PDF: ' + error.message;
-                errorElement.style.display = 'block';
-            }
-        }
-        
-        // Voeg een nieuwe pagina toe voor de tabel
-        doc.addPage();
-        currentY = 20;
-    }
-
-    // Tabel met laadgegevens
+    // Tabel met laadgegevens eerst
     doc.autoTable({
-        startY: currentY,
+        startY: 100,
         head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
         body: Array.from(document.querySelectorAll('#invoiceBody tr'))
             .filter(row => row.style.display !== 'none')
@@ -775,11 +722,63 @@
         20,
         doc.lastAutoTable.finalY + 10
     );
+
+    // Voeg preview afbeeldingen toe onder de tabel
+    let currentY = doc.lastAutoTable.finalY + 30; // Extra ruimte na het totaalbedrag
+    const previewImages = document.querySelectorAll('.preview-image');
+    
+    if (previewImages.length > 0) {
+        doc.setFontSize(12);
+        doc.text('Laadbewijzen:', 20, currentY);
+        currentY += 10;
+
+        // Kleinere afbeeldingen (100 pixels breed in plaats van 170)
+        const imgWidth = 100;
+        
+        for (const img of previewImages) {
+            if (currentY > 250) {
+                doc.addPage();
+                currentY = 20;
+            }
+
+            try {
+                // Wacht tot de afbeelding volledig is geladen
+                await new Promise((resolve, reject) => {
+                    if (img.complete) {
+                        resolve();
+                    } else {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                    }
+                });
+
+                // Bereken de juiste afmetingen met behoud van aspect ratio
+                const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
+                
+                doc.addImage(
+                    img.src,
+                    'JPEG',
+                    20,
+                    currentY,
+                    imgWidth,
+                    imgHeight
+                );
+                
+                currentY += imgHeight + 10;
+            } catch (error) {
+                console.error('Error adding image to PDF:', error);
+                const errorElement = document.getElementById('error');
+                errorElement.textContent = 'Fout bij het toevoegen van afbeelding aan PDF: ' + error.message;
+                errorElement.style.display = 'block';
+            }
+        }
+    }
     
     // Bestandsnaam en opslaan
     const filename = `Laadkosten_HKX-39-V_${formattedStartDate.replace(/\//g, '-')}_tm_${formattedEndDate.replace(/\//g, '-')}.pdf`;
     doc.save(filename);
 }
+
 
 
       function sendEmailOnly() {
