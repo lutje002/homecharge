@@ -668,7 +668,7 @@
     const formattedStartDate = startDate.toLocaleDateString('nl-NL');
     const formattedEndDate = endDate.toLocaleDateString('nl-NL');
     
-    // Header
+    // Eerste pagina - Header en tabel
     doc.setFontSize(16);
     doc.text('Laadkosten Overzicht', 20, 20);
     
@@ -697,7 +697,7 @@
     doc.text(`Periode: ${formattedStartDate} t/m ${formattedEndDate}`, 20, 85);
     doc.text(`Kenteken: HKX-39-V`, 20, 92);
 
-    // Tabel met laadgegevens eerst
+    // Tabel met laadgegevens
     doc.autoTable({
         startY: 100,
         head: [['Datum', 'Omschrijving', 'kWh', 'Prijs per kWh', 'Bedrag']],
@@ -723,24 +723,21 @@
         doc.lastAutoTable.finalY + 10
     );
 
-    // Voeg preview afbeeldingen toe onder de tabel
-    let currentY = doc.lastAutoTable.finalY + 30; // Extra ruimte na het totaalbedrag
+    // Tweede pagina - Afbeeldingen
     const previewImages = document.querySelectorAll('.preview-image');
     
     if (previewImages.length > 0) {
+        doc.addPage();
+        
         doc.setFontSize(12);
-        doc.text('Laadbewijzen:', 20, currentY);
-        currentY += 10;
-
-        // Kleinere afbeeldingen (100 pixels breed in plaats van 170)
-        const imgWidth = 100;
+        doc.text('Laadbewijzen:', 20, 20);
+        
+        let currentY = 30;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const maxWidth = pageWidth - 40; // 20px marge aan beide zijden
         
         for (const img of previewImages) {
-            if (currentY > 250) {
-                doc.addPage();
-                currentY = 20;
-            }
-
             try {
                 // Wacht tot de afbeelding volledig is geladen
                 await new Promise((resolve, reject) => {
@@ -753,18 +750,37 @@
                 });
 
                 // Bereken de juiste afmetingen met behoud van aspect ratio
-                const imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
+                const aspectRatio = img.naturalWidth / img.naturalHeight;
+                let imgWidth = maxWidth;
+                let imgHeight = imgWidth / aspectRatio;
+
+                // Controleer of de hoogte niet te groot is
+                if (imgHeight > pageHeight - 60) { // 30px marge boven en onder
+                    imgHeight = pageHeight - 60;
+                    imgWidth = imgHeight * aspectRatio;
+                }
+
+                // Controleer of we een nieuwe pagina nodig hebben
+                if (currentY + imgHeight > pageHeight - 20) {
+                    doc.addPage();
+                    currentY = 20;
+                }
+
+                // Centreer de afbeelding horizontaal
+                const xOffset = (pageWidth - imgWidth) / 2;
                 
                 doc.addImage(
                     img.src,
                     'JPEG',
-                    20,
+                    xOffset,
                     currentY,
                     imgWidth,
-                    imgHeight
+                    imgHeight,
+                    undefined,
+                    'MEDIUM' // Compressie voor kleinere bestandsgrootte
                 );
                 
-                currentY += imgHeight + 10;
+                currentY += imgHeight + 20; // 20px ruimte tussen afbeeldingen
             } catch (error) {
                 console.error('Error adding image to PDF:', error);
                 const errorElement = document.getElementById('error');
@@ -778,6 +794,7 @@
     const filename = `Laadkosten_HKX-39-V_${formattedStartDate.replace(/\//g, '-')}_tm_${formattedEndDate.replace(/\//g, '-')}.pdf`;
     doc.save(filename);
 }
+
 
 
 
